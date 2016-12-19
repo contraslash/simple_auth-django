@@ -8,7 +8,14 @@ from django.contrib.auth import login, logout
 class SimpleLogin(FormView):
     template_name = "simple_auth/login.html"
     form_class = AuthenticationForm
-    success_url = "/"
+
+    def get_success_url(self):
+        print self.request.GET
+        next_parameter = self.request.GET.get("next", False)
+        if next_parameter:
+            return next_parameter
+        else:
+            return "/"
 
     def form_valid(self, form):
         user = form.get_user()
